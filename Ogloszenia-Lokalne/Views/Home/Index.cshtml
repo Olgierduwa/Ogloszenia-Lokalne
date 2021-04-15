@@ -1,0 +1,43 @@
+﻿@model IEnumerable<PROJECT_MVC.Models.Poster>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h2>Ogłoszenia</h2>
+
+<table class="table">
+    <tr>
+        <th class="col-md-8">
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Views)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.ActionLink(item.Title, "Details", new { id = item.PosterID })
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Price)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AddingDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Views)
+    </td>
+</tr>
+    }
+
+</table>

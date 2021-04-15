@@ -1,0 +1,56 @@
+﻿@model IEnumerable<PROJECT_MVC.Models.Poster>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Moje ogłoszenia</h2>
+
+<p>
+    @Html.ActionLink("Nowe ogłoszenie", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th class="col-md-6">
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Views)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.ActionLink(item.Title, "Details", new { id = item.PosterID })
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Price)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.IsActive)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AddingDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Views)
+    </td>
+    <td>
+        @Html.ActionLink("Edytuj", "Edit", new { id = item.PosterID }) |
+        @Html.ActionLink("Usuń", "Delete", new { id = item.PosterID })
+    </td>
+</tr>
+}
+
+</table>
