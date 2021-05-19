@@ -1,0 +1,39 @@
+﻿@model Ogloszenia_Lokalne_2.Models.Category
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Html.DisplayNameFor(model => model.AdsCategories)</h2>
+<hr />
+
+<div>
+    <h2> <b> @Html.DisplayFor(model => model.Name) </b> </h2>
+    <h4> @Html.DisplayNameFor(model => model.CategoryParentID):
+         @Html.DisplayFor(model => model.CategoryParent.Name) </h4>
+    <hr />
+
+    <div class="form-group">
+
+        <ul class="dl-horizontal">
+            @if (ViewBag.Posters.Count > 0)
+            {
+                foreach (var item in ViewBag.Posters)
+                {
+                    <li>@item</li>
+                }
+            }
+            else
+            {
+                <li>Brak ogłoszeń</li>
+            }
+        </ul>
+    </div>
+
+    <div class="form-group col-md-12">
+        <a href="@Request.UrlReferrer">
+            <input type="button" value="Wróć" class="btn btn-default col-md-3" />
+        </a>
+    </div>
+
+</div>

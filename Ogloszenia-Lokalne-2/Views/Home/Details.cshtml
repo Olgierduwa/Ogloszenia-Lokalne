@@ -1,0 +1,97 @@
+﻿@model Ogloszenia_Lokalne_2.Models.ViewModels.AdViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <head>
+
+        <style type="text/css">
+
+            #blok0 {
+                background-color: #dcdcdc;
+                width: 100%;
+                padding: 30px;
+                padding-bottom: 20px;
+            }
+
+            #blok1 {
+                background-color: #ffffff;
+                height: 300px;
+                margin: 18px
+            }
+
+            #blok2 {
+                background-color: #dcdcdc;
+                margin-right: 36px
+            }
+
+            #blok3 {
+                background-color: #ffffff;
+                margin: 18px
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        <div id="blok0" class="col-md-12 form-group form-horizontal">
+
+            <div id="blok3" class="col-md-8">
+                <h1><b>@Html.DisplayFor(model => model.Ad.Title, new { htmlAttributes = new { @class = "" } })</b></h1>
+                <h3>@Html.DisplayFor(model => model.Ad.Price, new { htmlAttributes = new { @class = "" } })</h3>
+            </div>
+
+            <div id="blok3" class="col-md-3">
+                <h3><b>Publikacja</b></h3>
+                <h4>@Html.DisplayFor(model => model.Ad.AddingDate, new { htmlAttributes = new { @class = "" } })</h4>
+                <h4>Ostrykół 32E</h4>
+                @*<h4>@Html.DisplayFor(model => model.Ad.Location, new { htmlAttributes = new { @class = "" } })</h4>*@
+            </div>
+
+            <div class="col-md-8" id="blok2">
+                <img alt="Image" src="@Url.Content(Model.Ad.Image)" style="height: 140px; width: 280px;" class="col-md-12" />
+                <img alt="Image" src="@Url.Content(Model.Ad.Image)" style="height: 140px; width: 280px;" class="col-md-12" />
+            </div>
+
+            <div id="blok3" class="col-md-3">
+                <h3><b>Kontakt</b></h3>
+                <h4>@Html.DisplayFor(model => model.Ad.Owner.PhoneNumber, new { htmlAttributes = new { @class = "" } })</h4>
+                <h4>@Html.DisplayFor(model => model.Ad.Owner.Email, new { htmlAttributes = new { @class = "" } })</h4>
+            </div>
+
+            <div id="blok1" class="col-md-8">
+                <h3>@Html.DisplayFor(model => model.Ad.Content, new { htmlAttributes = new { @class = "" } })</h3>
+            </div>
+
+            <div id="blok1" class="col-md-3">
+                <h3><b>@Html.DisplayNameFor(model => model.Ad.AdsCategories)</b></h3>
+                @foreach (var item in ViewBag.Categories)
+                {<h3>@item.Name</h3>}
+            </div>
+
+            <div class="col-md-8">
+                <h2>@Html.DisplayFor(model => model.Ad.References, new { htmlAttributes = new { @class = "" } })</h2>
+            </div>
+
+            <div class="col-md-3" id="blok2" style="margin-left: 50px;">
+                <a href="@Request.UrlReferrer"> <input type="button" value="Wróć" class="btn btn-default col-md-12" /> </a>
+            </div>
+
+        </div>
+
+    </body>
+}
+
+
+@section Scripts {
+
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

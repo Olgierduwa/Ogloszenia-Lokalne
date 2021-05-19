@@ -1,0 +1,119 @@
+﻿@model Ogloszenia_Lokalne_2.Models.ViewModels.AdViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+@using (Html.BeginForm("Edit", "Ads", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <head>
+
+        <style type="text/css">
+
+            #blok0 {
+                background-color: #dcdcdc;
+                font-size: 20px;
+                width: 100%;
+                padding-bottom: 20px;
+            }
+
+            #blok1 {
+                background-color: #ffffff;
+                height: 300px;
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        <div id="blok0" class="form-group form-horizontal col-md-12">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Ad.AdID)
+            @Html.HiddenFor(model => model.Ad.AddingDate)
+            @Html.HiddenFor(model => model.Ad.Views)
+            @Html.HiddenFor(model => model.Ad.OwnerID)
+            @Html.HiddenFor(model => model.Ad.Image)
+
+            <div class="col-md-8" id="blok2">
+                <h1>Edycja ogłoszenia</h1>
+                <br />
+                <div class="col-md-6">
+                    @Html.LabelFor(model => model.Ad.Title, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Ad.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ad.Title, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="price_box col-md-6">
+                    @Html.LabelFor(model => model.Ad.IsValuable, htmlAttributes: new { @class = "" })
+                    @Html.CheckBoxFor(model => model.Ad.IsValuable, new { @class = "naCheckbox js-checkbox-disable-toggle", data_target = ".disable-toggle-@(i)" })
+                    @Html.EditorFor(model => model.Ad.Price, new { htmlAttributes = new { @class = "price_value disable-toggle-@(i) form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ad.Price, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="col-md-4" id="blok3">
+                <img alt="Image" src="@Url.Content(Model.Ad.Image)" style="height: 140px; width: 280px; margin-bottom: 10px; margin-top: 30px;" class="col-md-12 form-control" id="previewImage" />
+                <input type="file" name="Ad.ImageUpload" onchange="ShowImagePreview(this, document.getElementById('previewImage'))" />
+            </div>
+
+            <div class="col-md-8" id="blok3">
+                <h3>@Html.LabelFor(model => model.Ad.Content, htmlAttributes: new { @class = "control-label" })</h3>
+                <div id="blok1">
+                    @Html.TextAreaFor(model => model.Ad.Content, new { htmlAttributes = new { @class = "control-label", @style = "height: 600px;" } })
+                    @Html.ValidationMessageFor(model => model.Ad.Content, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-4" id="blok2">
+                <h3>@Html.LabelFor(model => model.Ad.AdsCategories, htmlAttributes: new { @class = "control-label" })</h3>
+                @Html.ListBoxFor(m => m.SelectedCategories, new MultiSelectList(Model.Categories, "CategoryID", "Name"),
+                    new { @class = "chzn-select form-control", @style = "height: 300px", data_placeholder = "Kategorie..." })
+                @Html.ValidationMessageFor(model => model.SelectedCategories, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-8" id="blok3">
+                <h3>@Html.LabelFor(model => model.Ad.References, htmlAttributes: new { @class = "control-label" })</h3>
+                @Html.EditorFor(model => model.Ad.References, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Ad.References, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4" id="blok4">
+                @Html.LabelFor(model => model.Ad.IsActive, htmlAttributes: new { @class = "control-label" })
+                @Html.CheckBoxFor(model => model.Ad.IsActive, new { htmlAttributes = new { @class = "checkbox" } })
+                <input type="submit" value="Zapisz" class="btn btn-default col-md-12" />
+                <a href="@Request.UrlReferrer"> <input type="button" value="Anuluj" class="btn btn-default col-md-12" /> </a>
+            </div>
+        </div>
+
+    </body>
+}
+
+
+@section Scripts {
+
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    <script>
+
+        $('.naCheckbox').before(function () {
+            var isChecked = $(this).is(':checked');
+            var parent = $(this).closest('.price_box'); // get the enclosing div
+            var textbox = parent.find('.price_value'); // get the associated textbox
+            textbox.prop('disabled', !isChecked); // use .prop() rather that .attr()
+        });
+
+        $('.naCheckbox').click(function () {
+            var isChecked = $(this).is(':checked');
+            var parent = $(this).closest('.price_box'); // get the enclosing div
+            var textbox = parent.find('.price_value'); // get the associated textbox
+            textbox.prop('disabled', !isChecked); // use .prop() rather that .attr()
+        });
+
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

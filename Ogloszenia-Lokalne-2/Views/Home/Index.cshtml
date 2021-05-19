@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Ogloszenia_Lokalne_2.Models.Ad>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<style type="text/css">
+
+
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+
+    #blok1 {
+        background-color: #ffffff;
+        height: 300px;
+        margin: 18px
+    }
+
+    #blok2 {
+        background-color: #dcdcdc;
+        margin-right: 36px
+    }
+
+    #blok3 {
+        background-color: #ffffff;
+        margin: 10px;
+        padding: 10px;
+    }
+
+</style>
+
+<div id="blok0" class="col-md-12 form-group form-horizontal">
+
+
+    <table class="table">
+        <tr>
+            <th>
+                <h1>Ogloszenia</h1>
+            </th>
+            <th>
+                <h3>
+                    @Html.DisplayNameFor(model => model.Title)
+                oraz
+                @Html.DisplayNameFor(model => model.Price)
+            </h3>
+        </th>
+        <th>
+            <h3>@Html.DisplayNameFor(model => model.AddingDate) </h3>
+        </th>
+        <th>
+            <h3>@Html.DisplayNameFor(model => model.Views) </h3>
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="col-md-3">
+                <img alt="Image" src="@Url.Content(item.Image)" style="height: 200px; width: 400px;" id="previewImage" />
+            </td>
+            <td class="col-md-4">
+                <div id="blok3">
+                    <h2> @Html.ActionLink(item.Title, "Details", new { id = item.AdID }) </h2>
+                    <h3> @Html.DisplayFor(modelItem => item.Price) </h3>
+                </div>
+            </td>
+            <td class="col-md-2">
+                <br />
+                <h4> @Html.DisplayFor(modelItem => item.AddingDate) </h4>
+                <h2> @Html.Label("", "Dni: " + DateTime.Now.Subtract(item.AddingDate).Days.ToString()) </h2>
+            </td>
+            <td>
+                <br />
+                <h2>@Html.DisplayFor(modelItem => item.Views) </h2>
+            </td>
+        </tr>
+    }
+
+</table>
+
+</div>
+
+<script>
+
+</script>

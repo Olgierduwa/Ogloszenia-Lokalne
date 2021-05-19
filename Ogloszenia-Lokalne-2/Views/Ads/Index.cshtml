@@ -1,0 +1,106 @@
+﻿@model IEnumerable<Ogloszenia_Lokalne_2.Models.Ad>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style type="text/css">
+
+
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+
+    #blok1 {
+        background-color: #ffffff;
+        height: 300px;
+        margin: 18px
+    }
+
+    #blok2 {
+        background-color: #dcdcdc;
+        margin-right: 36px
+    }
+
+    #blok3 {
+        background-color: #ffffff;
+        margin: 18px
+    }
+
+</style>
+
+<div id="blok0" class="col-md-12 form-group form-horizontal">
+
+    <h2>Moje ogłoszenia</h2>
+
+    <p>
+        <button class="btn btn-default col-md-2">
+            @Html.ActionLink("Nowe ogłoszenie", "Create")
+        </button>
+    </p>
+
+    <table class="table">
+        <tr>
+            <th> </th>
+            <th class="col-md-2">
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th class="col-md-3">
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Views)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddingDate)
+            </th>
+            <th>
+                Dni
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img alt="Image" src="@Url.Content(item.Image)" style="height: 50px; width: 100px;" id="previewImage" />
+                </td>
+                <td>
+                    <h4>
+                        @Html.ActionLink(item.Title, "Details", new { id = item.AdID })
+                    </h4>
+                </td>
+                <td>
+                    <h4>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </h4>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Views)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddingDate)
+                </td>
+                <td>
+                    @Html.Label("", DateTime.Now.Subtract(item.AddingDate).Days.ToString() + " dni")
+                </td>
+                <td>
+                    @Html.ActionLink("Edytuj", "Edit", new { id = item.AdID }) |
+                    @Html.ActionLink("Usuń", "Delete", new { id = item.AdID })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</div>
