@@ -17,6 +17,7 @@
                 background-color: #dcdcdc;
                 font-size: 20px;
                 width: 100%;
+                padding-top:30px;
                 padding-bottom: 20px;
             }
 
@@ -64,7 +65,7 @@
             <div class="col-md-8" id="blok3">
                 <h3>@Html.LabelFor(model => model.Ad.Content, htmlAttributes: new { @class = "control-label" })</h3>
                 <div id="blok1">
-                    @Html.TextAreaFor(model => model.Ad.Content, new { htmlAttributes = new { @class = "control-label", @style = "height: 600px;" } })
+                    @Html.TextAreaFor(model => model.Ad.Content, new { htmlAttributes = new { @style = "height: 600px; width: 1000px" } })
                     @Html.ValidationMessageFor(model => model.Ad.Content, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -85,7 +86,7 @@
             <div class="col-md-4" id="blok4">
                 @Html.LabelFor(model => model.Ad.IsActive, htmlAttributes: new { @class = "control-label" })
                 @Html.CheckBoxFor(model => model.Ad.IsActive, new { htmlAttributes = new { @class = "checkbox" } })
-                <input type="submit" value="Zapisz" class="btn btn-default col-md-12" />
+                <input type="submit" value="Zapisz" class="btn btn-success col-md-12" />
                 <a href="@Request.UrlReferrer"> <input type="button" value="Anuluj" class="btn btn-default col-md-12" /> </a>
             </div>
         </div>

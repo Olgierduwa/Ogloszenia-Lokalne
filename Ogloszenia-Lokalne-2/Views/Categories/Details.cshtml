@@ -1,39 +1,66 @@
-﻿@model Ogloszenia_Lokalne_2.Models.Category
+﻿@model Ogloszenia_Lokalne_2.Models.ViewModels.CategoryViewModel
 
 @{
     ViewBag.Title = "Details";
 }
+<style type="text/css">
 
-<h2>@Html.DisplayNameFor(model => model.AdsCategories)</h2>
-<hr />
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+</style>
 
-<div>
-    <h2> <b> @Html.DisplayFor(model => model.Name) </b> </h2>
-    <h4> @Html.DisplayNameFor(model => model.CategoryParentID):
-         @Html.DisplayFor(model => model.CategoryParent.Name) </h4>
+<div id="blok0">
+
+    <h2>@Html.DisplayNameFor(model => model.Category.AdsCategories) "@Html.DisplayFor(model => model.Category.Name)" </h2>
+    <h4>@Html.DisplayNameFor(model => model.Category.CategoryParentID): @Html.DisplayFor(model => model.Category.CategoryParent.Name) </h4>
     <hr />
+    <div>
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => Model.ExampleAd.AdID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.ExampleAd.Owner.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.ExampleAd.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.ExampleAd.AddingDate)
+                </th>
+                <th></th>
+            </tr>
 
-    <div class="form-group">
-
-        <ul class="dl-horizontal">
-            @if (ViewBag.Posters.Count > 0)
+            @foreach (var item in Model.Ads)
             {
-                foreach (var item in ViewBag.Posters)
-                {
-                    <li>@item</li>
-                }
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.AdID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Owner.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.AddingDate)
+                    </td>
+                    <td>
+                        <input type="button" style="width:90px" value="Pokaż" class="btn btn-success" onclick="location.href='@Url.Action("Details", "Ads", new { id = item.AdID })'" />
+                        <input type="button" style="width:90px" value="Edytuj" class="btn btn-default" onclick="location.href='@Url.Action("Edit", "Ads", new { id = item.AdID })'" />
+                        <input type="button" style="width:90px" value="Zablokuj" class="btn btn-warning" onclick="location.href='@Url.Action("Block", "Ads", new { id = item.AdID })'" />
+                        <input type="button" style="width:90px" value="Usuń" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Ads", new { id = item.AdID })'" />
+                    </td>
+                </tr>
             }
-            else
-            {
-                <li>Brak ogłoszeń</li>
-            }
-        </ul>
-    </div>
 
-    <div class="form-group col-md-12">
-        <a href="@Request.UrlReferrer">
-            <input type="button" value="Wróć" class="btn btn-default col-md-3" />
-        </a>
+        </table>
     </div>
-
+    <input type="button" style="width:140px" value="Wróć" class="btn btn-default" onclick="location.href ='@Url.Action("Index")'"  />
 </div>

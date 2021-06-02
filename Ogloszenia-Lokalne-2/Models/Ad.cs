@@ -58,7 +58,7 @@ namespace Ogloszenia_Lokalne_2.Models
         public DateTime AddingDate { get; set; }    // data dodania ogloszenia
 
 
-        [Display(Name = "Wejścia")]
+        [Display(Name = "Liczba odwiedzin")]
         public int Views { get; set; }           // ilość odsłon ogłoszenia
 
 

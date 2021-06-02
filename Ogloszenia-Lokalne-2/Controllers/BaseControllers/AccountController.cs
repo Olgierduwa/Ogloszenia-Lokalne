@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -6,9 +7,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Ogloszenia_Lokalne_2.Models;
+using static Ogloszenia_Lokalne_2.Models.ApplicationDbContext;
 
 namespace Ogloszenia_Lokalne_2.Controllers
 {
@@ -51,6 +54,8 @@ namespace Ogloszenia_Lokalne_2.Controllers
                 _userManager = value;
             }
         }
+
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         //
         // GET: /Account/Login
@@ -169,14 +174,20 @@ namespace Ogloszenia_Lokalne_2.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
 
+                    IdentityManager im = new IdentityManager();
+                    im.AddUserToRoleByUsername(user.Email, "User");
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
+
             }
 
             // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
             return View(model);
         }
+
+        
+
 
         //
         // GET: /Account/ConfirmEmail

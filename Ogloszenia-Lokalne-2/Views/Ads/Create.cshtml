@@ -14,10 +14,11 @@
         <style type="text/css">
 
             #blok0 {
-                background-color: #dcdcdc;
+                background-color: #dddddd;
                 font-size: 20px;
                 width: 100%;
                 padding-bottom: 20px;
+                padding-top: 30px;
             }
 
             #blok1 {
@@ -85,7 +86,7 @@
             <div class="col-md-4" id="blok4">
                 @Html.LabelFor(model => model.Ad.IsActive, htmlAttributes: new { @class = "control-label" })
                 @Html.CheckBoxFor(model => model.Ad.IsActive, new { htmlAttributes = new { @class = "checkbox" } })
-                <input type="submit" value="Zapisz" class="btn btn-default col-md-12" />
+                <input type="submit" value="Zapisz" class="btn btn-success col-md-12" />
                 <a href="@Request.UrlReferrer"> <input type="button" value="Anuluj" class="btn btn-default col-md-12" /> </a>
             </div>
 

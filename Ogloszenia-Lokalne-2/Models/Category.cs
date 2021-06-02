@@ -26,7 +26,7 @@ namespace Ogloszenia_Lokalne_2.Models
         public virtual Category CategoryParent { get; set; }
 
 
-        [Display(Name = "Ogłoszenia danej kategorii")]
+        [Display(Name = "Ogłoszenia kategorii")]
         public virtual ICollection<AdCategory> AdsCategories { get; set; }
     }
 }

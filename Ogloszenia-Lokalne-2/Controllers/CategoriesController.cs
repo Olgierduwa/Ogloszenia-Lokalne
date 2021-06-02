@@ -7,10 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Ogloszenia_Lokalne_2.Models;
+using Ogloszenia_Lokalne_2.Models.ViewModels;
 
 namespace Ogloszenia_Lokalne_2.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -29,16 +30,13 @@ namespace Ogloszenia_Lokalne_2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            CategoryViewModel cvm = new CategoryViewModel { Category = db.Categories.Find(id) };
+            if (cvm == null)
             {
                 return HttpNotFound();
             }
-
-            var query = category.AdsCategories.Select(p => p.Ad.Title + " - " + p.Ad.AddingDate);
-            ViewBag.Posters = query.ToList();
-
-            return View(category);
+            cvm.Ads = cvm.Category.AdsCategories.Select(c => c.Ad).ToList();
+            return View(cvm);
         }
 
         // GET: Categories/Create

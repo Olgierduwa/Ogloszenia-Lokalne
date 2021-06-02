@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Ogloszenia_Lokalne_2.Models.Ad>
+﻿@model Ogloszenia_Lokalne_2.Models.ViewModels.AdIndexViewModel
 
 @{
     ViewBag.Title = "Home Page";
@@ -8,81 +8,132 @@
 
 
     #blok0 {
-        background-color: #dcdcdc;
+        background-color: #dddddd;
         width: 100%;
         padding: 30px;
         padding-bottom: 20px;
     }
 
     #blok1 {
-        background-color: #ffffff;
-        height: 300px;
-        margin: 18px
+        padding: 10px;
     }
 
     #blok2 {
-        background-color: #dcdcdc;
-        margin-right: 36px
+        margin-top: 12px;
     }
 
     #blok3 {
         background-color: #ffffff;
-        margin: 10px;
-        padding: 10px;
+        padding: 20px;
+        text-align: right;
     }
 
+    #blok4 {
+        margin-top: 32px;
+    }
 </style>
 
-<div id="blok0" class="col-md-12 form-group form-horizontal">
+    @Html.AntiForgeryToken()
+    <div id="blok0" class="col-md-12 form-group form-horizontal">
 
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.SiteID)
+        @Html.HiddenFor(model => model.SiteCount)
+        @Html.HiddenFor(model => model.Filtr)
+        @Html.HiddenFor(model => model.AdCount)
 
-    <table class="table">
-        <tr>
-            <th>
-                <h1>Ogloszenia</h1>
-            </th>
-            <th>
-                <h3>
-                    @Html.DisplayNameFor(model => model.Title)
-                oraz
-                @Html.DisplayNameFor(model => model.Price)
-            </h3>
-        </th>
-        <th>
-            <h3>@Html.DisplayNameFor(model => model.AddingDate) </h3>
-        </th>
-        <th>
-            <h3>@Html.DisplayNameFor(model => model.Views) </h3>
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td class="col-md-3">
-                <img alt="Image" src="@Url.Content(item.Image)" style="height: 200px; width: 400px;" id="previewImage" />
-            </td>
-            <td class="col-md-4">
-                <div id="blok3">
-                    <h2> @Html.ActionLink(item.Title, "Details", new { id = item.AdID }) </h2>
-                    <h3> @Html.DisplayFor(modelItem => item.Price) </h3>
+        <div>
+            <div class="col-md-3" id="blok2">
+                @Html.DisplayNameFor(model => model.Search)
+                @Html.EditorFor(m => m.Search, new { htmlAttributes = new { @class = "form-control", data_placeholder = "Wyszukaj..." } })
+                <div id="blok2">
+                    <input type="button" value="Wyszukaj" class="btn btn-warning" style="width:100%; margin-bottom:10px;"
+                           onclick="location.href='@Url.Action("Filter", @Model)'" />
                 </div>
-            </td>
-            <td class="col-md-2">
-                <br />
-                <h4> @Html.DisplayFor(modelItem => item.AddingDate) </h4>
-                <h2> @Html.Label("", "Dni: " + DateTime.Now.Subtract(item.AddingDate).Days.ToString()) </h2>
-            </td>
-            <td>
-                <br />
-                <h2>@Html.DisplayFor(modelItem => item.Views) </h2>
-            </td>
-        </tr>
-    }
+            </div>
 
-</table>
+            <div class="col-md-2" id="blok2">
+                @Html.DisplayNameFor(model => model.Categories)
+                @Html.DropDownListFor(m => m.SelectedCategories, new MultiSelectList(Model.Categories, "CategoryID", "Name"),
+                    new { @class = "chzn-select form-control", data_placeholder = "Kategorie..." })
+            </div>
+            <div class="col-md-2" id="blok2">
+                @Html.DisplayNameFor(model => model.FromPrice)
+                @Html.EditorFor(m => m.FromPrice, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="col-md-2" id="blok2">
+                @Html.DisplayNameFor(model => model.ToPrice)
+                @Html.EditorFor(m => m.ToPrice, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="col-md-0" id="blok2"> </div>
 
-</div>
+
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                <div class="col-md-3" id="blok4">
+                    <input type="submit" value="Filtruj Wyszukiwanie" class="btn btn-warning" style="width:100%; margin-bottom:10px;"
+                           id="Filter" onclick="location.href='@Url.Action("Filter", "Home", new { id = Model.SiteID })'" />
+                    <input type="submit" value="Wyczyść Filtrowanie" class="btn btn-warning" style="width:100%; margin-bottom:10px;"
+                           onclick="location.href='@Url.Action("Index", "Home", new { id = Model.SiteID, filtr = false })'" />
+                </div>
+            }
+
+            </div>
+
+        <table class="table table-hover">
+
+            <tr>
+                <th>
+                    <h2>Ogloszenia</h2>
+                </th>
+                <th>
+                    <h2>
+                        @Html.DisplayNameFor(model => model.ExpampleAd.Title) /
+                        @Html.DisplayNameFor(model => model.ExpampleAd.Price)
+                    </h2>
+                </th>
+                <th>
+                    <h4>@Html.DisplayNameFor(model => model.ExpampleAd.AddingDate) /</h4>
+                    <h4>/ @Html.DisplayNameFor(model => model.ExpampleAd.Views) </h4>
+                </th>
+            </tr>
+
+            @foreach (Ogloszenia_Lokalne_2.Models.Ad item in ViewBag.Ads)
+            {
+                <tr onclick="location.href = '@(Url.Action("Details", "Home", new { id = item.AdID }))'">
+                    <td style="width:40%; height:200px; padding:15px">
+                        <img alt="Image" src="@Url.Content(item.Image)" style="height:100%; width:100%;" />
+                    </td>
+                    <td style="width:40%; height:200px; padding:15px; font-size:28px;">
+                        <div style="background-color:#ffffff; height:100%; padding:20px; ">
+                            @Html.ActionLink(item.Title, "Details", new { id = item.AdID })
+                            @if (item.IsValuable)
+                            {<h3> @Html.DisplayFor(modelItem => item.Price) </h3> }
+                            else
+                            {<h4><b>BEZCENNE</b></h4>}
+                        </div>
+                    </td>
+                    <td style="width:20%; height:200px; padding:15px; font-size:26px;">
+                        <div style="background-color:#eeeeee; height:100%; padding:20px; text-align:right;">
+                            @Html.DisplayFor(modelItem => item.AddingDate)
+                            <br />
+                            @Html.Label("", "Dni: " + DateTime.Now.Subtract(item.AddingDate).Days.ToString())
+                            <br />
+                            @Html.DisplayFor(modelItem => item.Views)
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <div style="color: #313131;" class="label col-md-12">
+            <input type="button" value="<" class="btn btn-danger" onclick="location.href='@Url.Action("PreviousSite", @Model)'" />
+            <label style="font-size:20px; padding:20px;">@Model.SiteID / @Model.SiteCount</label>
+            <input type="button" value=">" class="btn btn-success" onclick="location.href='@Url.Action("Nextsite", @Model)'" />
+        </div>
+
+    </div>
 
 <script>
 

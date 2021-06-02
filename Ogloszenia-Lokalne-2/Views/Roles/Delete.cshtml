@@ -1,0 +1,28 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<style type="text/css">
+
+    #blok0 {
+        background-color: #dddddd;
+        width: 100%;
+        padding: 200px;
+        font-size: 50px;
+        text-align: center;
+    }
+</style>
+
+<div id="blok0">
+    Chcesz usunąć rolę
+    <br />
+    "@Html.DisplayFor(model => model.Name)"?
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" style="width:140px" value="Usuń" class="btn btn-danger" />
+        <input type="button" style="width:140px" value="Anuluj" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
+    }
+</div>

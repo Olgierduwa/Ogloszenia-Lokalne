@@ -1,0 +1,62 @@
+﻿@model Ogloszenia_Lokalne_2.Models.ViewModels.RoleViewModel
+
+@{
+    ViewBag.Title = "SetRole";
+}
+<style type="text/css">
+
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+</style>
+
+<div id="blok0">
+
+    <h2>Ustaw role</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.User.Id)
+        @Html.HiddenFor(model => model.Role)
+
+        <div class="form-horizontal ">
+            <h4>Użytkownikowi <b>@Html.DisplayFor(model => Model.User.Email)</b></h4>
+            <hr />
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Roles, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.ListBoxFor(m => m.SelectedRoles, new MultiSelectList(Model.Roles, "Id", "Name"),
+                        new { @class = "chzn-select form-control", @style = "height: 150px; font-size: 20px", data_placeholder = "Role..." })
+                </div>
+            </div>
+
+            <div class="form-group col-md-10">
+                <div class="form-group col-md-3"> </div>
+                <div class="form-group col-md-5">
+                    <div class="col-md-9">
+                        <input type="submit" value="Zapisz" class="btn btn-success col-md-12" />
+                    </div>
+                    <div class="col-md-9">
+                        <a href="@Request.UrlReferrer">
+                            <input type="button" value="Anuluj" class="btn btn-default col-md-12" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group"> </div>
+
+        </div>
+    }
+
+</div>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

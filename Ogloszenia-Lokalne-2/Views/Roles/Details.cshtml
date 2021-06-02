@@ -1,0 +1,58 @@
+﻿@model Ogloszenia_Lokalne_2.Models.ViewModels.RoleViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style type="text/css">
+
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+</style>
+
+<div id="blok0">
+
+    <h2>@Html.DisplayNameFor(model => model.Users) "@Html.DisplayFor(model => model.Role.Name)" </h2>
+    <hr />
+    <div>
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => Model.User.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.User.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.User.PhoneNumber)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.PhoneNumber)
+                    </td>
+                    <td>
+                        <input type="button" style="width:90px" value="Zmien rolę" class="btn btn-default" onclick="location.href='@Url.Action("SetRole", "Users", new { id = item.Id })'" />
+                        <input type="button" style="width:140px" value="Usuń Użytkownika" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Users", new { id = item.Id })'" />
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <input type="button" style="width:140px" value="Wróć" class="btn btn-default" onclick="location.href ='@Url.Action("Index")'" />
+</div>

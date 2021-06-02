@@ -37,49 +37,53 @@
     <h2>Moje ogłoszenia</h2>
 
     <p>
-        <button class="btn btn-default col-md-2">
-            @Html.ActionLink("Nowe ogłoszenie", "Create")
-        </button>
+        <input type="button" style="width:140px" value="Dodaj nowe" class="btn btn-success" onclick="location.href='@Url.Action("Create")'" />
     </p>
 
-    <table class="table">
+    <table class="table table-striped table-hover">
         <tr>
-            <th> </th>
-            <th class="col-md-2">
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th class="col-md-3">
+            <th></th>
+            <th></th>
+            <th style="width:10%; font-size:20px;">
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th>
+            <th style="width:50%; font-size:20px;">
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th style="width:8%; font-size:14px;">
                 @Html.DisplayNameFor(model => model.IsActive)
             </th>
-            <th>
+            <th style="width:8%; font-size:14px;">
                 @Html.DisplayNameFor(model => model.Views)
             </th>
-            <th>
+            <th style="width:10%; font-size:14px;">
                 @Html.DisplayNameFor(model => model.AddingDate)
             </th>
-            <th>
-                Dni
+            <th style="width:5%; font-size:14px;">
+                Wisi dni
             </th>
-            <th></th>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
+                
+                <td style="font-size:20px;">
+                    <input type="button" style="width:90px" value="Edytuj" class="btn btn-warning" onclick="location.href='@Url.Action("Edit",  new { id = item.AdID })'" />
+                    <input type="button" style="width:90px" value="Usuń" class="btn btn-danger" onclick="location.href='@Url.Action("Delete",  new { id = item.AdID })'" />
+                </td>
                 <td>
                     <img alt="Image" src="@Url.Content(item.Image)" style="height: 50px; width: 100px;" id="previewImage" />
                 </td>
                 <td>
-                    <h4>
-                        @Html.ActionLink(item.Title, "Details", new { id = item.AdID })
-                    </h4>
+                    @if (item.IsValuable)
+                    {<h4> @Html.DisplayFor(modelItem => item.Price) </h4> }
+                    else
+                    {<h5><b>BEZCENNE</b></h5>}
                 </td>
                 <td>
                     <h4>
-                        @Html.DisplayFor(modelItem => item.Price)
+                        @Html.ActionLink(item.Title, "Details", new { id = item.AdID })
                     </h4>
                 </td>
                 <td>
@@ -93,10 +97,6 @@
                 </td>
                 <td>
                     @Html.Label("", DateTime.Now.Subtract(item.AddingDate).Days.ToString() + " dni")
-                </td>
-                <td>
-                    @Html.ActionLink("Edytuj", "Edit", new { id = item.AdID }) |
-                    @Html.ActionLink("Usuń", "Delete", new { id = item.AdID })
                 </td>
             </tr>
         }

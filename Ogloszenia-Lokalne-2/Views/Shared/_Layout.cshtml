@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - moja aplikacja platformy ASP.NET</title>
@@ -9,8 +10,8 @@
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+<body style="background-color:#666666">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#333333">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,13 +24,18 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Moje Ogłoszenia", "Index", "Ads")</li>
-                    <li>@Html.ActionLink("Kategorie", "Index", "Categories")</li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Kategorie", "Index", "Categories")</li>
+                        <li>@Html.ActionLink("Zgłoszenia", "ReportedList", "Admin")</li>
+                        <li>@Html.ActionLink("Użytkownicy", "Index", "Roles")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="background-color:#999999">
         @RenderBody()
         <hr />
         <footer>

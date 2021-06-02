@@ -12,14 +12,95 @@ namespace Ogloszenia_Lokalne_2.Controllers
 {
     public class HomeController : Controller
     {
+        private int CountAdsPerSite = 3;
+        private int CountSite;
+
         private ApplicationDbContext db = new ApplicationDbContext();
-        public ActionResult Index()
+        public ActionResult Index(int id = 1)
         {
-            var ads = db.Ads.Where(p => p.IsActive == true);
-            return View(ads.ToList());
+            id = CheckID(id);
+            AdIndexViewModel AI = new AdIndexViewModel
+            {
+                SiteID = id,
+                Filtr = false,
+                FromPrice = 0,
+                ToPrice = 0,
+                SiteCount = CountSite
+            };
+            AI.Categories = db.Categories.Select(c => c).ToList();
+            AI.SelectedCategories = db.Categories.Where(x => x.Name == "BRAK").Select(c => c.CategoryID).ToList();
+
+            List<Ad> Ads = db.AdsUsers.Where(p => p.Ad.IsActive == true).Select(c => c.Ad).ToList();
+            return Show(AI, Ads);
         }
 
-        [Authorize]
+        [HttpPost]
+        public ActionResult Index(AdIndexViewModel AI, string id)
+        {
+            ;
+            return Show(AI, GetAds(AI));
+        }
+
+        public ActionResult Search(AdIndexViewModel AdIndexViewModel)
+        {
+            return Show(AdIndexViewModel, GetAds(AdIndexViewModel));
+        }
+        [HttpPost]
+        public ActionResult Filter(AdIndexViewModel AdIndexViewModel, string id)
+        {
+            ;
+            return Show(AdIndexViewModel, GetAds(AdIndexViewModel));
+        }
+        public ActionResult Unfilter(AdIndexViewModel AI)
+        {
+            return Show(AI, GetAds(AI));
+        }
+        public ActionResult NextSite(AdIndexViewModel AI)
+        {
+            ;
+            AI.SiteID = CheckID(AI.SiteID + 1);
+            return Show(AI, GetAds(AI));
+        }
+        public ActionResult PreviousSite(AdIndexViewModel AI)
+        {
+            AI.SiteID = CheckID(AI.SiteID - 1);
+            return Show(AI, GetAds(AI));
+        }
+
+        private ActionResult Show(AdIndexViewModel AI, List<Ad> Ads)
+        {
+            List<Ad> AdsPerSite = new List<Ad>();
+            int StartID = (AI.SiteID - 1) * CountAdsPerSite;
+            AI.AdCount = Ads.Count();
+            for (int i = StartID; i < StartID + CountAdsPerSite; i++) if (i < AI.AdCount) AdsPerSite.Add(Ads[i]);
+            ViewBag.Ads = AdsPerSite;
+            var categories = db.Categories.Select(c => new { CategoryID = c.CategoryID, CategoryName = c.Name }).ToList();
+            ViewBag.Categories = new MultiSelectList(categories, "CategoryID", "CategoryName");
+            return View(viewName: "Index", AI);
+        }
+        private List<Ad> GetAds(AdIndexViewModel AI)
+        {
+            List<Ad> Ads = db.AdsUsers.Where(p => p.Ad.IsActive == true).Select(c => c.Ad).ToList();
+            if(AI.Search != "")
+            {
+
+            }
+            if(AI.Filtr)
+            {
+
+            }
+            return Ads;
+        }
+
+        private int CheckID(int id)
+        {
+            int CountAds = db.AdsUsers.Where(p => p.Ad.IsActive == true).Count();
+            CountSite = (CountAds + CountAdsPerSite - 1) / CountAdsPerSite;
+            if (id < 1) id = 1;
+            if (id > (CountAds + CountAdsPerSite - 1) / CountAdsPerSite) id = CountSite;
+            return id;
+        }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
