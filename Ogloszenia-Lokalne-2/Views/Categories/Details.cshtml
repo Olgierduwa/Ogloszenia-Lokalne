@@ -52,9 +52,8 @@
                         @Html.DisplayFor(model => item.AddingDate)
                     </td>
                     <td>
-                        <input type="button" style="width:90px" value="Pokaż" class="btn btn-success" onclick="location.href='@Url.Action("Details", "Ads", new { id = item.AdID })'" />
-                        <input type="button" style="width:90px" value="Edytuj" class="btn btn-default" onclick="location.href='@Url.Action("Edit", "Ads", new { id = item.AdID })'" />
-                        <input type="button" style="width:90px" value="Zablokuj" class="btn btn-warning" onclick="location.href='@Url.Action("Block", "Ads", new { id = item.AdID })'" />
+                        <input type="button" style="width:90px" value="Pokaż" class="btn btn-info" onclick="location.href='@Url.Action("Details", "Ads", new { id = item.AdID })'" />
+                        <input type="button" style="width:90px" value="Edytuj" class="btn btn-warning" onclick="location.href='@Url.Action("Edit", "Ads", new { id = item.AdID })'" />
                         <input type="button" style="width:90px" value="Usuń" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Ads", new { id = item.AdID })'" />
                     </td>
                 </tr>

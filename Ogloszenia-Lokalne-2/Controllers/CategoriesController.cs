@@ -118,6 +118,15 @@ namespace Ogloszenia_Lokalne_2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = db.Categories.Find(id);
+            List<Category> dzieci = db.Categories.Where(m => m.CategoryParentID == category.CategoryID).ToList();
+
+            foreach(var dziecko in dzieci)
+            {
+                dziecko.CategoryParentID = category.CategoryParentID;
+                db.Entry(dziecko).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
             db.Categories.Remove(category);
             db.SaveChanges();
             return RedirectToAction("Index");

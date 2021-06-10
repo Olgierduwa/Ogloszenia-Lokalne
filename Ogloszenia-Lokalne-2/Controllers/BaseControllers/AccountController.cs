@@ -186,9 +186,6 @@ namespace Ogloszenia_Lokalne_2.Controllers
             return View(model);
         }
 
-        
-
-
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -220,7 +217,7 @@ namespace Ogloszenia_Lokalne_2.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null)
                 {
                     // Nie ujawniaj informacji o tym, że użytkownik nie istnieje lub nie został potwierdzony
                     return View("ForgotPasswordConfirmation");
@@ -228,14 +225,21 @@ namespace Ogloszenia_Lokalne_2.Controllers
 
                 // Aby uzyskać więcej informacji o sposobie włączania potwierdzania konta i resetowaniu hasła, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=320771
                 // Wyślij wiadomość e-mail z tym łączem
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Resetuj hasło", "Resetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Resetuj hasło", "Resetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+                return RedirectToAction("ConfirmationResetPasswordLink", "Account", new { link = callbackUrl });
             }
 
             // Dotarcie do tego miejsca wskazuje, że wystąpił błąd, wyświetl ponownie formularz
             return View(model);
+        }
+        [AllowAnonymous]
+        public ActionResult ConfirmationResetPasswordLink(string Link)
+        {
+            ViewBag.Link = Link;
+            return View();
         }
 
         //

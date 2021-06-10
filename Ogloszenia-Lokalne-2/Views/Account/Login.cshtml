@@ -45,6 +45,8 @@
                             <div class="checkbox">
                                 @Html.CheckBoxFor(m => m.RememberMe)
                                 @Html.LabelFor(m => m.RememberMe)
+                                <input type="button" style="width:160px" value="Nie pamiętasz hasła?" class="btn btn-default"
+                                       onclick="location.href='@Url.Action("ForgotPassword")'" />
                             </div>
                         </div>
                     </div>
@@ -54,16 +56,7 @@
                         <input type="button" style="width:140px" value="Rejestracja" class="btn btn-danger" onclick="location.href='@Url.Action("Register")'" />
                         </div>
                     </div>
-                    @* Włącz ten element po włączeniu potwierdzenia konta dla funkcji resetowania hasła
-                        <p>
-                            @Html.ActionLink("Nie pamiętasz hasła?", "ForgotPassword")
-                        </p>*@
                 }
-            </section>
-        </div>
-        <div class="col-md-4">
-            <section id="socialLoginForm">
-                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
             </section>
         </div>
     </div>

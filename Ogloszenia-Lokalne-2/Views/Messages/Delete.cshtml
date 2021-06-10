@@ -1,0 +1,28 @@
+﻿@model Ogloszenia_Lokalne_2.Models.Message
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<style type="text/css">
+
+    #blok0 {
+        background-color: #dddddd;
+        width: 100%;
+        padding: 200px;
+        font-size: 50px;
+        text-align: center;
+    }
+</style>
+
+<div id="blok0">
+    Chcesz usunąć wiadomość
+    <br />
+    "@Html.DisplayFor(model => model.Content)"?
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" style="width:140px" value="Usuń" class="btn btn-danger" />
+        <input type="button" style="width:140px" value="Anuluj" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Home")'" />
+    }
+</div>

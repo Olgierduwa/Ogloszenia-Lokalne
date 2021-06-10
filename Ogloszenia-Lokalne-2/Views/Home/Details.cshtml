@@ -81,6 +81,8 @@
             </div>
 
             <div class="col-md-3" id="blok2" style="margin-left: 50px;">
+                <input type="button" value="Zgłoś" class="btn btn-default col-md-12"
+                       onclick="location.href='@Url.Action("Create", "Reports", new { id = Model.Ad.AdID })'" />
                 <a href="@Request.UrlReferrer"> <input type="button" value="Wróć" class="btn btn-default col-md-12" /> </a>
             </div>
 

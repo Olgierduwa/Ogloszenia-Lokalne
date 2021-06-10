@@ -1,0 +1,56 @@
+﻿@model Ogloszenia_Lokalne_2.Models.Report
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+</style>
+
+<div id="blok0" class="col-md-12">
+    <h2>Zgłoszenie ogłoszenia</h2>
+
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.AdID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.AdID)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.UserReported.Email) zgłaszającego
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UserReported.Email)
+            </dd>
+            <br />
+            <dt>
+                @Html.DisplayNameFor(model => model.ReportMessage)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReportMessage)
+            </dd>
+
+        </dl>
+
+        <input type="button" value="Wróć" class="btn btn-default col-lg-offset-2 col-md-2"
+               onclick="location.href='@Url.Action("Index", "Reports")'" />
+        <input type="button" value="Ogłoszenie" class="btn btn-success col-md-2"
+               onclick="location.href='@Url.Action("Edit", "Ads", new { id = Model.AdID })'" />
+        <input type="button" value="Usuń ogłoszenie" class="btn btn-danger col-md-2"
+               onclick="location.href='@Url.Action("DeleteAd", "Reports", new { ReportID = Model.ReportID, AdID = Model.AdID })'" />
+
+    </div>
+</div>

@@ -126,6 +126,11 @@ namespace PROJECT_MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            if(db.Ads.Find(id) == null)
+            {
+                return RedirectToAction("NotExist");
+            }
+
             List<Category> categories = db.Categories.Select(c => c).ToList();
             AdViewModel adv = new AdViewModel() { Ad = db.Ads.Find(id), Categories = categories };
             adv.SelectedCategories = adv.Ad.AdsCategories.Select(c => c.CategoryID).ToList();
@@ -137,6 +142,12 @@ namespace PROJECT_MVC.Controllers
 
             return View(adv);
         }
+
+        public ActionResult NotExist()
+        {
+            return View();
+        }
+
 
         // POST: Ads/Edit/5
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
@@ -179,7 +190,13 @@ namespace PROJECT_MVC.Controllers
 
                 db.Entry(adNew).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+
+                var userId = User.Identity.GetUserId();
+                if (db.Users.Find(userId).Roles.First().RoleId == "a8a51adf-f0df-4a14-a7b8-5844a99339da")
+                    return RedirectToAction("Index","Reports");
+                else
+                    return RedirectToAction("Index");
             }
             return View(adEditView);
         }
@@ -191,6 +208,7 @@ namespace PROJECT_MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Ad ad = db.Ads.Find(id);
             if (ad == null)
             {

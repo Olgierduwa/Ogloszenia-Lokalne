@@ -1,0 +1,46 @@
+﻿@model Ogloszenia_Lokalne_2.Models.Message
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<style>
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+</style>
+
+<div id="blok0">
+    <h2>Nowa wiadomość</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Utówrz" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

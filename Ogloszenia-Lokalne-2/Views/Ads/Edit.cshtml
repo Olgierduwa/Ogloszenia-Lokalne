@@ -26,6 +26,10 @@
                 height: 300px;
             }
 
+            textarea {
+                max-width: 100%
+            }
+
         </style>
 
     </head>
@@ -65,7 +69,8 @@
             <div class="col-md-8" id="blok3">
                 <h3>@Html.LabelFor(model => model.Ad.Content, htmlAttributes: new { @class = "control-label" })</h3>
                 <div id="blok1">
-                    @Html.TextAreaFor(model => model.Ad.Content, new { htmlAttributes = new { @style = "height: 600px; width: 1000px" } })
+                    @Html.TextAreaFor(model => model.Ad.Content, new { @class = "form-control",
+                        @style = "min-width: 100%; max-width: 100%; max-height: 100%; min-height: 100%" })
                     @Html.ValidationMessageFor(model => model.Ad.Content, "", new { @class = "text-danger" })
                 </div>
             </div>

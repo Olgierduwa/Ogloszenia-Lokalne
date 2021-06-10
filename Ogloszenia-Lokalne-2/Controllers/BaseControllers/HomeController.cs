@@ -1,4 +1,5 @@
-﻿using Ogloszenia_Lokalne_2.Models;
+﻿using Microsoft.AspNet.Identity;
+using Ogloszenia_Lokalne_2.Models;
 using Ogloszenia_Lokalne_2.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,85 +17,110 @@ namespace Ogloszenia_Lokalne_2.Controllers
         private int CountSite;
 
         private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Index(int id = 1)
         {
-            id = CheckID(id);
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            string RoleName = "";
+            if(user != null) RoleName = db.Roles.Find(user.Roles.First().RoleId).Name;
+            ViewBag.RoleName = RoleName;
+            int CountAds = db.AdsUsers.Where(p => p.Ad.IsActive == true).Count();
+            id = CheckID(id, CountAds);
+
             AdIndexViewModel AI = new AdIndexViewModel
             {
                 SiteID = id,
-                Filtr = false,
+                Filtr = true,
                 FromPrice = 0,
                 ToPrice = 0,
-                SiteCount = CountSite
+                Search = "",
+                SiteCount = CountSite,
+                Messages = db.Messages.ToList()
             };
-            AI.Categories = db.Categories.Select(c => c).ToList();
             AI.SelectedCategories = db.Categories.Where(x => x.Name == "BRAK").Select(c => c.CategoryID).ToList();
 
-            List<Ad> Ads = db.AdsUsers.Where(p => p.Ad.IsActive == true).Select(c => c.Ad).ToList();
-            return Show(AI, Ads);
+            return Show(AI);
         }
 
         [HttpPost]
-        public ActionResult Index(AdIndexViewModel AI, string id)
+        public ActionResult Index(AdIndexViewModel AI)
         {
-            ;
-            return Show(AI, GetAds(AI));
-        }
-
-        public ActionResult Search(AdIndexViewModel AdIndexViewModel)
-        {
-            return Show(AdIndexViewModel, GetAds(AdIndexViewModel));
-        }
-        [HttpPost]
-        public ActionResult Filter(AdIndexViewModel AdIndexViewModel, string id)
-        {
-            ;
-            return Show(AdIndexViewModel, GetAds(AdIndexViewModel));
-        }
-        public ActionResult Unfilter(AdIndexViewModel AI)
-        {
-            return Show(AI, GetAds(AI));
+            return Show(AI);
         }
         public ActionResult NextSite(AdIndexViewModel AI)
         {
-            ;
-            AI.SiteID = CheckID(AI.SiteID + 1);
-            return Show(AI, GetAds(AI));
+            int CountAds = db.AdsUsers.Where(p => p.Ad.IsActive == true).Count();
+            AI.SiteID = CheckID(AI.SiteID + 1, CountAds);
+            return Show(AI);
         }
         public ActionResult PreviousSite(AdIndexViewModel AI)
         {
-            AI.SiteID = CheckID(AI.SiteID - 1);
-            return Show(AI, GetAds(AI));
+            int CountAds = db.AdsUsers.Where(p => p.Ad.IsActive == true).Count();
+            AI.SiteID = CheckID(AI.SiteID - 1, CountAds);
+            return Show(AI);
         }
 
-        private ActionResult Show(AdIndexViewModel AI, List<Ad> Ads)
+        private ActionResult Show(AdIndexViewModel AI)
         {
+            int AdCount = AI.AdCount;
+            List<Ad> Ads = GetAds(AI);
+            AI.AdCount = Ads.Count();
+            if(AdCount != AI.AdCount)
+                AI.SiteID = CheckID(1, AI.AdCount);
+            AI.SiteID = CheckID(AI.SiteID, AI.AdCount);
+            CountSite = (AI.AdCount + CountAdsPerSite - 1) / CountAdsPerSite;
+
+            if (!AI.Filtr)
+                AI.SelectedCategories = db.Categories.Where(x => x.Name == "BRAK").Select(c => c.CategoryID).ToList();
+            AI.Categories = db.Categories.Select(c => c).ToList();
+            AI.Messages = db.Messages.ToList();
+            AI.SiteCount = CountSite;
+
             List<Ad> AdsPerSite = new List<Ad>();
             int StartID = (AI.SiteID - 1) * CountAdsPerSite;
-            AI.AdCount = Ads.Count();
-            for (int i = StartID; i < StartID + CountAdsPerSite; i++) if (i < AI.AdCount) AdsPerSite.Add(Ads[i]);
+            if(StartID >= 0)
+                for (int i = StartID; i < StartID + CountAdsPerSite; i++) if (i < AI.AdCount) AdsPerSite.Add(Ads[i]);
             ViewBag.Ads = AdsPerSite;
-            var categories = db.Categories.Select(c => new { CategoryID = c.CategoryID, CategoryName = c.Name }).ToList();
-            ViewBag.Categories = new MultiSelectList(categories, "CategoryID", "CategoryName");
+
             return View(viewName: "Index", AI);
         }
         private List<Ad> GetAds(AdIndexViewModel AI)
         {
-            List<Ad> Ads = db.AdsUsers.Where(p => p.Ad.IsActive == true).Select(c => c.Ad).ToList();
-            if(AI.Search != "")
-            {
+            var query = db.Ads.Where(p => p.IsActive == true);
 
-            }
-            if(AI.Filtr)
+            List<Ad> ads = query.ToList();
+            if (AI.Filtr)
             {
+                if (AI.Search != null && AI.Search != "")
+                    query = query.Where(m => m.Content.Contains(AI.Search) || m.Title.Contains(AI.Search));
 
+                if (AI.ToPrice > 0 && query != null && query.Count() > 0)
+                    query = query.Where(m => m.Price >= AI.FromPrice && m.Price <= AI.ToPrice);
+
+                Category category = db.Categories.Find(AI.SelectedCategories.FirstOrDefault());
+                if(category != null && category.Name != "BRAK")
+                {
+                    List<Ad> ads2 = query.ToList();
+                    ads = new List<Ad>();
+                    foreach(var ad in ads2)
+                    {
+                        foreach(var cat in ad.AdsCategories)
+                        {
+                            if(cat.CategoryID == category.CategoryID)
+                            {
+                                ads.Add(ad);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else ads = query.ToList();
             }
-            return Ads;
+
+            return ads;
         }
-
-        private int CheckID(int id)
+        private int CheckID(int id, int CountAds)
         {
-            int CountAds = db.AdsUsers.Where(p => p.Ad.IsActive == true).Count();
             CountSite = (CountAds + CountAdsPerSite - 1) / CountAdsPerSite;
             if (id < 1) id = 1;
             if (id > (CountAds + CountAdsPerSite - 1) / CountAdsPerSite) id = CountSite;

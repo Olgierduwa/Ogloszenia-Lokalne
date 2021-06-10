@@ -13,20 +13,25 @@ namespace Ogloszenia_Lokalne_2.Models.ViewModels
         public int SiteID { get; set; }
         public int SiteCount { get; set; }
         public int AdCount { get; set; }
+
+        [Display(Name = "Filtruj")]
         public bool Filtr { get; set; }
 
-        [Display(Name = "Wyszykaj:")]
+        [Display(Name = "Fraza:")]
         public string Search { get; set; }
 
         [Display(Name = "Cena od:")]
-        public decimal FromPrice { get; set; }
+        public double FromPrice { get; set; }
 
         [Display(Name = "Cena do:")]
-        public decimal ToPrice { get; set; }
+        public double ToPrice { get; set; }
 
         [Display(Name = "Kategorie:")]
         public virtual List<Category> Categories { get; set; }
         public List<int> SelectedCategories { get; set; }
+
+        public virtual List<Message> Messages { get; set; }
+
 
     }
 }

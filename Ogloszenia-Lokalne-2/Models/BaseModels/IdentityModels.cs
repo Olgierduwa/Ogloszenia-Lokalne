@@ -40,6 +40,9 @@ namespace Ogloszenia_Lokalne_2.Models
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<AdCategory> AdsCategories { get; set; }
 		public DbSet<AdUser> AdsUsers { get; set; }
+		public DbSet<Report> Reports { get; set; }
+		public DbSet<Message> Messages { get; set; }
+
 
 		public class IdentityManager
 		{
@@ -135,5 +138,6 @@ namespace Ogloszenia_Lokalne_2.Models
 			}
 
 		}
-	}
+
+    }
 }

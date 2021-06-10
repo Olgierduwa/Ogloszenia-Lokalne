@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Ogloszenia_Lokalne_2.Models.Report>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    #blok0 {
+        background-color: #dcdcdc;
+        width: 100%;
+        padding: 30px;
+        padding-bottom: 20px;
+    }
+</style>
+
+<div id="blok0">
+    <h2>Zgłoszone ogłoszenia</h2>
+    <hr />
+
+    <table class="table table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AdID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserReported.Email) Zgłaszającego
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserReported.Email)
+                </td>
+                <td>
+                    <input type="button" value="Zarządzaj" class="btn btn-default col-md-4"
+                           onclick="location.href='@Url.Action("Details", "Reports", new { id = item.ReportID })'" />
+                    <input type="button" value="Usuń zgłoszenie" class="btn btn-danger col-lg-offset-1 col-md-4"
+                           onclick="location.href='@Url.Action("Delete", "Reports", new { id = item.ReportID })'" />
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

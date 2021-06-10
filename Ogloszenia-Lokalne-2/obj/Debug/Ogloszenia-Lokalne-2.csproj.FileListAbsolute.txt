@@ -125,3 +125,8 @@ C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-L
 C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia-Lokalne-2.pdb
 C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia_Lokalne_2.Migrations.init.resources
 C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia-Lokalne-2.csproj.GenerateResource.cache
+C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia_Lokalne_2.Migrations.v.resources
+C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia_Lokalne_2.Migrations.v1.resources
+C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia_Lokalne_2.Migrations.v2.resources
+C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia_Lokalne_2.Migrations.v3.resources
+C:\Users\OLGIERD\Desktop\STUDIA\SEMESTR VI\MVC\Ogloszenia-Lokalne-2\Ogloszenia-Lokalne-2\obj\Debug\Ogloszenia_Lokalne_2.Migrations.v4.resources

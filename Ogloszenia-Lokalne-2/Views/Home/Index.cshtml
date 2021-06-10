@@ -31,54 +31,86 @@
     #blok4 {
         margin-top: 32px;
     }
+
 </style>
 
-    @Html.AntiForgeryToken()
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
     <div id="blok0" class="col-md-12 form-group form-horizontal">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.SiteID)
         @Html.HiddenFor(model => model.SiteCount)
         @Html.HiddenFor(model => model.Filtr)
         @Html.HiddenFor(model => model.AdCount)
 
         <div>
-            <div class="col-md-3" id="blok2">
+            @if (ViewBag.RoleName == "Admin")
+            {
+                <br />
+                <input type="button" value="Dodaj wiadomość" class="btn btn-success"
+                       onclick="location.href='@Url.Action("Create", "Messages")'" />
+                <br />
+            }
+            <br />
+            <table class="col-md-12 table-striped table-condensed" style="font-size:24px; padding:20px">
+                @foreach (Ogloszenia_Lokalne_2.Models.Message item in Model.Messages)
+                {
+                    <tr style="background-color:#313131; color:#ff9b20">
+                        <td class="col-md-10" style="padding:10px">
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </td>
+
+                        @if (ViewBag.RoleName == "Admin")
+                        {
+                            <td>
+                                <input type="button" value="Edytuj" class="btn btn-default"
+                                       onclick="location.href='@Url.Action("Edit", "Messages", new { id = item.MessageID })'" />
+                                <input type="button" value="Usuń" class="btn btn-danger"
+                                       onclick="location.href='@Url.Action("Delete", "Messages", new { id = item.MessageID })'" />
+                            </td>
+                        }
+                    </tr>
+                }
+                @Html.HiddenFor(model => model.Messages)
+            </table>
+        </div>
+
+        <div class="price_box">
+
+            <div class="col-md-2" id="blok4" style="font-size:22px;">
+                Filtruj
+                @Html.CheckBoxFor(model => model.Filtr, new { @class = "naCheckbox js-checkbox-disable-toggle",
+                @style = "width:1em; height:1em;", data_target = ".disable-toggle-@(i)" })
+            </div>
+
+            <div class="col-md-2" id="blok2">
                 @Html.DisplayNameFor(model => model.Search)
-                @Html.EditorFor(m => m.Search, new { htmlAttributes = new { @class = "form-control", data_placeholder = "Wyszukaj..." } })
-                <div id="blok2">
-                    <input type="button" value="Wyszukaj" class="btn btn-warning" style="width:100%; margin-bottom:10px;"
-                           onclick="location.href='@Url.Action("Filter", @Model)'" />
-                </div>
+                @Html.EditorFor(m => m.Search, new { htmlAttributes = new { @class = "price_value disable-toggle-@(i) form-control", data_placeholder = "Wyszukaj..." } })
             </div>
 
             <div class="col-md-2" id="blok2">
                 @Html.DisplayNameFor(model => model.Categories)
                 @Html.DropDownListFor(m => m.SelectedCategories, new MultiSelectList(Model.Categories, "CategoryID", "Name"),
-                    new { @class = "chzn-select form-control", data_placeholder = "Kategorie..." })
+                    new { @class = "price_value disable-toggle-@(i) form-control", data_placeholder = "Kategorie..." })
             </div>
+
             <div class="col-md-2" id="blok2">
                 @Html.DisplayNameFor(model => model.FromPrice)
-                @Html.EditorFor(m => m.FromPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(m => m.FromPrice, new { htmlAttributes = new { @class = "price_value disable-toggle-@(i) form-control" } })
             </div>
+
             <div class="col-md-2" id="blok2">
                 @Html.DisplayNameFor(model => model.ToPrice)
-                @Html.EditorFor(m => m.ToPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(m => m.ToPrice, new { htmlAttributes = new { @class = "price_value disable-toggle-@(i) form-control" } })
             </div>
-            <div class="col-md-0" id="blok2"> </div>
 
+        </div>
 
-            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
-            {
-                <div class="col-md-3" id="blok4">
-                    <input type="submit" value="Filtruj Wyszukiwanie" class="btn btn-warning" style="width:100%; margin-bottom:10px;"
-                           id="Filter" onclick="location.href='@Url.Action("Filter", "Home", new { id = Model.SiteID })'" />
-                    <input type="submit" value="Wyczyść Filtrowanie" class="btn btn-warning" style="width:100%; margin-bottom:10px;"
-                           onclick="location.href='@Url.Action("Index", "Home", new { id = Model.SiteID, filtr = false })'" />
-                </div>
-            }
-
-            </div>
+        <div class="col-md-2" id="blok4">
+            <input type="submit" value="Odświerz" class="btn btn-warning" style="width:100%; margin-bottom:10px; " />
+        </div>
 
         <table class="table table-hover">
 
@@ -109,8 +141,8 @@
                             @Html.ActionLink(item.Title, "Details", new { id = item.AdID })
                             @if (item.IsValuable)
                             {<h3> @Html.DisplayFor(modelItem => item.Price) </h3> }
-                            else
-                            {<h4><b>BEZCENNE</b></h4>}
+                        else
+                        {<h4><b>BEZCENNE</b></h4>}
                         </div>
                     </td>
                     <td style="width:20%; height:200px; padding:15px; font-size:26px;">
@@ -127,14 +159,39 @@
 
         </table>
 
-        <div style="color: #313131;" class="label col-md-12">
-            <input type="button" value="<" class="btn btn-danger" onclick="location.href='@Url.Action("PreviousSite", @Model)'" />
-            <label style="font-size:20px; padding:20px;">@Model.SiteID / @Model.SiteCount</label>
-            <input type="button" value=">" class="btn btn-success" onclick="location.href='@Url.Action("Nextsite", @Model)'" />
-        </div>
+        @if(@Model.SiteCount > 0)
+        {
+            <div style="color: #313131;" class="label col-md-12">
+                <input type="button" value="<" class="btn btn-danger" onclick="location.href='@Url.Action("PreviousSite", @Model)'" />
+                <label style="font-size:20px; padding:20px;">@Model.SiteID / @Model.SiteCount</label>
+                <input type="button" value=">" class="btn btn-success" onclick="location.href='@Url.Action("Nextsite", @Model)'" />
+            </div>
+        }
 
     </div>
 
-<script>
+}
 
-</script>
+@section Scripts {
+
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    <script>
+
+        $('.naCheckbox').before(function () {
+            var isChecked = $(this).is(':checked');
+            var parent = $(this).closest('.price_box'); // get the enclosing div
+            var textbox = parent.find('.price_value'); // get the associated textbox
+            textbox.prop('disabled', !isChecked); // use .prop() rather that .attr()
+        });
+
+        $('.naCheckbox').click(function () {
+            var isChecked = $(this).is(':checked');
+            var parent = $(this).closest('.price_box'); // get the enclosing div
+            var textbox = parent.find('.price_value'); // get the associated textbox
+            textbox.prop('disabled', !isChecked); // use .prop() rather that .attr()
+        });
+
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

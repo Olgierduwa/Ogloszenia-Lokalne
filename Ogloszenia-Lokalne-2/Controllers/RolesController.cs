@@ -12,6 +12,7 @@ using Ogloszenia_Lokalne_2.Models.ViewModels;
 
 namespace Ogloszenia_Lokalne_2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

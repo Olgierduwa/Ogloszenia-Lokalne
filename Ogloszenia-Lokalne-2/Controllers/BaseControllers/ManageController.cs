@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -15,6 +16,7 @@ namespace Ogloszenia_Lokalne_2.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ManageController()
         {
@@ -75,6 +77,29 @@ namespace Ogloszenia_Lokalne_2.Controllers
             return View(model);
         }
 
+        public ActionResult CahngeEmail()
+        {
+            var userId = User.Identity.GetUserId();
+            IndexViewModel model = new IndexViewModel() { Email = db.Users.Find(userId).Email };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CahngeEmail(IndexViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.Identity.GetUserId();
+                ApplicationUser user = db.Users.Find(userId);
+                user.Email = model.Email;
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
@@ -103,7 +128,10 @@ namespace Ogloszenia_Lokalne_2.Controllers
         // GET: /Manage/AddPhoneNumber
         public ActionResult AddPhoneNumber()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            AddPhoneNumberViewModel model = new AddPhoneNumberViewModel();
+            model.Number = db.Users.Find(userId).PhoneNumber;
+            return View(model);
         }
 
         //
@@ -127,7 +155,7 @@ namespace Ogloszenia_Lokalne_2.Controllers
                 };
                 await UserManager.SmsService.SendAsync(message);
             }
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number, Code = code });
         }
 
         //
@@ -162,11 +190,10 @@ namespace Ogloszenia_Lokalne_2.Controllers
 
         //
         // GET: /Manage/VerifyPhoneNumber
-        public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
+        public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber, string code)
         {
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
             // Wyślij wiadomość SMS za pośrednictwem dostawcy usług SMS w celu zweryfikowania numeru telefonu
-            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
+            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber, Code = code });
         }
 
         //

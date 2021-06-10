@@ -27,7 +27,7 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Kategorie", "Index", "Categories")</li>
-                        <li>@Html.ActionLink("Zgłoszenia", "ReportedList", "Admin")</li>
+                        <li>@Html.ActionLink("Zgłoszenia", "Index", "Reports")</li>
                         <li>@Html.ActionLink("Użytkownicy", "Index", "Roles")</li>
                     }
                 </ul>
